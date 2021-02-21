@@ -1,0 +1,29 @@
+# https://github.com/GoogleCloudPlatform/vpc-network-tester
+# https://cloud.google.com/run/docs/authenticating/developers
+
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    entrypoint: /bin/bash
+    args:
+      - "-c"
+      - |
+        set -ex
+        docker build -t "${_ARTIFACT_REGISTRY}/vpc-network-tester:latest" .
+        docker push "${_ARTIFACT_REGISTRY}/vpc-network-tester:latest"
+
+  # https://cloud.google.com/run/docs/configuring/environment-variables
+  #- name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+  #  entrypoint: /bin/sh
+  #  args:
+  #    - "-c"
+  #    - |
+  #      set -ex
+  #      gcloud run deploy vpc-network-tester \
+  #        --platform=managed \
+  #        --region=${_DEFAULT_REGION} \
+  #        --image ${_ARTIFACT_REGISTRY}/vpc-network-tester:latest \
+  #        --vpc-connector=${_CONNECTOR_NAME} \
+          #--allow-unauthenticated
+
+# Cloud Build Timeout
+timeout: 3600s
